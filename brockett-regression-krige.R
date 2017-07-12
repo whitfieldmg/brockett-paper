@@ -253,8 +253,26 @@ lowsnab_d2.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + 
 
 lowsnab_d2.stats <- extract_krige_stats(lowsnab_d2.cv)
 
-lowsnab_d3.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation+ moisture + hls_plot,
+lowsnab_d3.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                           lowsnab_d3_sub,
                           model = lowsnab_d3.vgm)
 
 lowsnab_d3.stats <- extract_krige_stats(lowsnab_d3.cv)
+
+hollins_d1.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
+                          hollins_d1_sub,
+                          model = hollins_d1.vgm)
+
+hollins_d1.stats <- extract_krige_stats(hollins_d1.cv)
+
+hollins_d2.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
+                          hollins_d2_sub,
+                          model = hollins_d2.vgm)
+
+hollins_d2.stats <- extract_krige_stats(hollins_d2.cv)
+
+hollins_d3.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
+                          hollins_d3_sub,
+                          model = hollins_d3.vgm)
+
+hollins_d3.stats <- extract_krige_stats(hollins_d3.cv)
