@@ -3,6 +3,7 @@ library(geoR)
 library(gstat)
 library(sf)
 library(dplyr)
+library(here)
 
 ## Function from Stackoverflow to remove rows containing missing data from spatial objects
 # FUNCTION TO REMOVE NA's IN sp DataFrame OBJECT
@@ -41,12 +42,12 @@ extract_krige_stats <- function(krige_model) {
 }
 
 # Set path to project
-projdir <- paste0(here(), "/brockett-soilc/")
+(projdir <- paste0(here(), "/brockett-soilc/"))
 
 # Set paths to geodatabases
-birkhowe.gdb <- "/Users/mikewhitfield/Brockett-paper/MikeBirkhowe.gdb"
-hollins.gdb <- "/Users/mikewhitfield/Brockett-paper/MikeHollins.gdb"
-lowsnab.gdb <- "/Users/mikewhitfield/Brockett-paper/MikeLowsnab.gdb"
+birkhowe.gdb <- paste0(projdir, "MikeBirkhowe.gdb")
+hollins.gdb <- paste0(projdir, "MikeHollins.gdb")
+lowsnab.gdb <- paste0(projdir, "MikeLowsnab.gdb")
 
 # Examine Feature Classes present in geodatabases
 birkhowe_fclist <- ogrListLayers(birkhowe.gdb)
@@ -283,3 +284,22 @@ birkhowe.stats <- bind_rows(list(birkhowe_d1.stats,
                                  birkhowe_d2.stats,
                                  birkhowe_d3.stats),
                             .id = "depth")
+
+lowsnab.stats <- bind_rows(list(lowsnab_d1.stats,
+                                lowsnab_d2.stats,
+                                lowsnab_d3.stats),
+                           .id = "depth")
+
+hollins.stats <- bind_rows(list(hollins_d1.stats,
+                                hollins_d2.stats,
+                                hollins_d3.stats),
+                           .id = "depth")
+
+# A table of tables for export
+allsite.stats <- bind_rows(list(birkhowe.stats,
+                                lowsnab.stats,
+                                hollins_d1.stats),
+                           .id = "site")
+
+write.csv(allsite.stats, file = paste0(projdir, "allsite_stats.csv"),
+          row.names = FALSE)
