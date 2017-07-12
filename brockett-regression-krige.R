@@ -72,7 +72,7 @@ lowsnab_d2 <- readOGR(dsn = lowsnab.gdb, layer = "lowsnab_soild2_pt_v5", pointDr
 lowsnab_d3 <- readOGR(dsn = lowsnab.gdb, layer = "lowsnab_soild3_pt_v5", pointDropZ = TRUE)
 
 # Read elevation data for Hollins (missing from geodatabase)
-hollins_elevation <- read.csv("/Users/mikewhitfield/brockett-soilc/hollins_elevation.csv")
+hollins_elevation <- read.csv(paste0(projdir, "hollins_elevation.csv"))
 
 # Remove empty elevation column from spatial data
 hollins_d1@data <- select(hollins_d1@data, -elevation)
@@ -209,13 +209,13 @@ lowsnab_d3_sub <- sp.na.omit(lowsnab_d3_sub)
 
 
 # Load saved variograms (vgm objects)
-load("/Users/mikewhitfield/Brockett-paper/birkhowe_d1_vgm.RData")
-load("/Users/mikewhitfield/Brockett-paper/birkhowe_d2_vgm.Rdata")
-load("/Users/mikewhitfield/Brockett-paper/birkhowe_d3_vgm.Rdata")
+load(paste0(projdir, "birkhowe_d1_vgm.RData"))
+load(paste0(projdir, "birkhowe_d2_vgm.Rdata"))
+load(paste0(projdir, "birkhowe_d3_vgm.Rdata"))
 
-load("/Users/mikewhitfield/Brockett-paper/lowsnab_d1_vgm.Rdata")
-load("/Users/mikewhitfield/Brockett-paper/lowsnab_d2_vgm.Rdata")
-load("/Users/mikewhitfield/Brockett-paper/lowsnab_d3_vgm.Rdata")
+load(paste0(projdir, "lowsnab_d1_vgm.Rdata"))
+load(paste0(projdir, "lowsnab_d2_vgm.Rdata"))
+load(paste0(projdir, "lowsnab_d3_vgm.Rdata"))
 
 load(paste0(projdir, "hollins_d1_vgm.Rdata"))
 load(paste0(projdir, "hollins_d2_vgm.Rdata"))
@@ -276,3 +276,10 @@ hollins_d3.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + 
                           model = hollins_d3.vgm)
 
 hollins_d3.stats <- extract_krige_stats(hollins_d3.cv)
+
+# Consolidate kriging summaries into site tables
+
+birkhowe.stats <- bind_rows(list(birkhowe_d1.stats,
+                                 birkhowe_d2.stats,
+                                 birkhowe_d3.stats),
+                            .id = "depth")
