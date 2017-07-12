@@ -180,24 +180,32 @@ lowsnab_d3_sub <- sp.na.omit(lowsnab_d3_sub)
 # save(lowsnab_d3.vgm, file = "/Users/mikewhitfield/Brockett-paper/lowsnab_d3_vgm.Rdata")
 
 ## Hollins
-hollins_d1.ifit <- eyefit(variog(as.geodata(hollins_d1_sub["totC_mean_mass_vol"])))
-
-# cov.model sigmasq   phi            tausq kappa kappa2   practicalRange
-# 1 exponential   469.5 429.1 115.809480837674  <NA>   <NA> 1285.46871855289
-
-hollins_d1.vgm <- as.vgm.variomodel(hollins_d1.ifit[[1]])
-
-save(hollins_d1.vgm, file = "/Users/mikewhitfield/brockett-soilc/hollins_d1_vgm.Rdata")
-
-hollins_d2.ifit <- eyefit(variog(as.geodata(hollins_d2_sub["totC_mean_mass_vol"])))
-
-# cov.model sigmasq    phi            tausq kappa kappa2   practicalRange
-# 1  gaussian 7209.36 205.43 1212.48302015222  <NA>   <NA> 355.562020515782
-
-hollins_d2.vgm <- as.vgm.variomodel(hollins_d2.ifit[[1]])
-
-save(hollins_d2.vgm, file = paste0(projdir, "hollins_d2_vgm.Rdata"))
-
+# hollins_d1.ifit <- eyefit(variog(as.geodata(hollins_d1_sub["totC_mean_mass_vol"])))
+# 
+# # cov.model sigmasq   phi            tausq kappa kappa2   practicalRange
+# # 1 exponential   469.5 429.1 115.809480837674  <NA>   <NA> 1285.46871855289
+# 
+# hollins_d1.vgm <- as.vgm.variomodel(hollins_d1.ifit[[1]])
+# 
+# save(hollins_d1.vgm, file = "/Users/mikewhitfield/brockett-soilc/hollins_d1_vgm.Rdata")
+# 
+# hollins_d2.ifit <- eyefit(variog(as.geodata(hollins_d2_sub["totC_mean_mass_vol"])))
+# 
+# # cov.model sigmasq    phi            tausq kappa kappa2   practicalRange
+# # 1  gaussian 7209.36 205.43 1212.48302015222  <NA>   <NA> 355.562020515782
+# 
+# hollins_d2.vgm <- as.vgm.variomodel(hollins_d2.ifit[[1]])
+# 
+# save(hollins_d2.vgm, file = paste0(projdir, "hollins_d2_vgm.Rdata"))
+# 
+# hollins_d3.ifit <- eyefit(variog(as.geodata(hollins_d3_sub["totC_mean_mass_vol"])))
+# 
+# # cov.model sigmasq    phi            tausq kappa kappa2   practicalRange
+# # 1 exponential  247.67 369.64 83.3074927059148  <NA>   <NA> 1107.34247757153
+# 
+# hollins_d3.vgm <- as.vgm.variomodel(hollins_d3.ifit[[1]])
+# 
+# save(hollins_d3.vgm, file = paste0(projdir, "hollins_d3_vgm.Rdata"))
 
 
 # Load saved variograms (vgm objects)
@@ -208,6 +216,11 @@ load("/Users/mikewhitfield/Brockett-paper/birkhowe_d3_vgm.Rdata")
 load("/Users/mikewhitfield/Brockett-paper/lowsnab_d1_vgm.Rdata")
 load("/Users/mikewhitfield/Brockett-paper/lowsnab_d2_vgm.Rdata")
 load("/Users/mikewhitfield/Brockett-paper/lowsnab_d3_vgm.Rdata")
+
+load(paste0(projdir, "hollins_d1_vgm.Rdata"))
+load(paste0(projdir, "hollins_d2_vgm.Rdata"))
+load(paste0(projdir, "hollins_d3_vgm.Rdata"))
+
 
 # Kriging with cross-validation
 birkhowe_d1.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
