@@ -40,6 +40,9 @@ extract_krige_stats <- function(krige_model) {
   return(stat_table)
 }
 
+# Set path to project
+projdir <- paste0(here(), "/brockett-soilc/")
+
 # Set paths to geodatabases
 birkhowe.gdb <- "/Users/mikewhitfield/Brockett-paper/MikeBirkhowe.gdb"
 hollins.gdb <- "/Users/mikewhitfield/Brockett-paper/MikeHollins.gdb"
@@ -185,6 +188,17 @@ hollins_d1.ifit <- eyefit(variog(as.geodata(hollins_d1_sub["totC_mean_mass_vol"]
 hollins_d1.vgm <- as.vgm.variomodel(hollins_d1.ifit[[1]])
 
 save(hollins_d1.vgm, file = "/Users/mikewhitfield/brockett-soilc/hollins_d1_vgm.Rdata")
+
+hollins_d2.ifit <- eyefit(variog(as.geodata(hollins_d2_sub["totC_mean_mass_vol"])))
+
+# cov.model sigmasq    phi            tausq kappa kappa2   practicalRange
+# 1  gaussian 7209.36 205.43 1212.48302015222  <NA>   <NA> 355.562020515782
+
+hollins_d2.vgm <- as.vgm.variomodel(hollins_d2.ifit[[1]])
+
+save(hollins_d2.vgm, file = paste0(projdir, "hollins_d2_vgm.Rdata"))
+
+
 
 # Load saved variograms (vgm objects)
 load("/Users/mikewhitfield/Brockett-paper/birkhowe_d1_vgm.RData")
