@@ -167,14 +167,24 @@ lowsnab_d3_sub <- sp.na.omit(lowsnab_d3_sub)
 # 
 # save(lowsnab_d2.vgm, file = "/Users/mikewhitfield/Brockett-paper/lowsnab_d2_vgm.Rdata")
 
-lowsnab_d3.ifit <- eyefit(variog(as.geodata(lowsnab_d3_sub["totC_mean_mass_vol"])))
+# lowsnab_d3.ifit <- eyefit(variog(as.geodata(lowsnab_d3_sub["totC_mean_mass_vol"])))
+# 
+# # cov.model sigmasq   phi            tausq kappa kappa2   practicalRange
+# # 1 exponential    2100 53.01 295.711917421923  <NA>   <NA> 158.803767818213
+# 
+# lowsnab_d3.vgm <- as.vgm.variomodel(lowsnab_d3.ifit[[1]])
+# 
+# save(lowsnab_d3.vgm, file = "/Users/mikewhitfield/Brockett-paper/lowsnab_d3_vgm.Rdata")
+
+## Hollins
+hollins_d1.ifit <- eyefit(variog(as.geodata(hollins_d1_sub["totC_mean_mass_vol"])))
 
 # cov.model sigmasq   phi            tausq kappa kappa2   practicalRange
-# 1 exponential    2100 53.01 295.711917421923  <NA>   <NA> 158.803767818213
+# 1 exponential   469.5 429.1 115.809480837674  <NA>   <NA> 1285.46871855289
 
-lowsnab_d3.vgm <- as.vgm.variomodel(lowsnab_d3.ifit[[1]])
+hollins_d1.vgm <- as.vgm.variomodel(hollins_d1.ifit[[1]])
 
-save(lowsnab_d3.vgm, file = "/Users/mikewhitfield/Brockett-paper/lowsnab_d3_vgm.Rdata")
+save(hollins_d1.vgm, file = "/Users/mikewhitfield/brockett-soilc/hollins_d1_vgm.Rdata")
 
 # Load saved variograms (vgm objects)
 load("/Users/mikewhitfield/Brockett-paper/birkhowe_d1_vgm.RData")
