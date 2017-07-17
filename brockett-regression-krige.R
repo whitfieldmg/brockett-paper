@@ -102,17 +102,17 @@ lowsnab_d3_sub <- lowsnab_d3[, sub_cols]
 # birkhowe_d1_sub2 <- birkhowe_d1 %>%
 #                       select.sf(hls_plot, elevation, moisture, totC_mean_mass_vol)
 
-# Filter rows containing NAs
+# Filter rows containing NAs and remove duplicates
 # Overwrite _sub object
-birkhowe_d1_sub <- sp.na.omit(birkhowe_d1_sub)
-birkhowe_d2_sub <- sp.na.omit(birkhowe_d2_sub)
-birkhowe_d3_sub <- sp.na.omit(birkhowe_d3_sub)
-hollins_d1_sub <- sp.na.omit(hollins_d1_sub)
-hollins_d2_sub <- sp.na.omit(hollins_d2_sub)
-hollins_d3_sub <- sp.na.omit(hollins_d3_sub)
+birkhowe_d1_sub <- sp.na.omit(remove.duplicates(birkhowe_d1_sub))
+birkhowe_d2_sub <- sp.na.omit(remove.duplicates(birkhowe_d2_sub))
+birkhowe_d3_sub <- sp.na.omit(remove.duplicates(birkhowe_d3_sub))
+hollins_d1_sub <- sp.na.omit(remove.duplicates(hollins_d1_sub))
+hollins_d2_sub <- sp.na.omit(remove.duplicates(hollins_d2_sub))
+hollins_d3_sub <- sp.na.omit(remove.duplicates(hollins_d3_sub))
 # lowsnab_d1_sub <- sp.na.omit(lowsnab_d1_sub) # No empty cells. Function returns empty data
-lowsnab_d2_sub <- sp.na.omit(lowsnab_d2_sub)
-lowsnab_d3_sub <- sp.na.omit(lowsnab_d3_sub)
+lowsnab_d2_sub <- sp.na.omit(remove.duplicates(lowsnab_d2_sub))
+lowsnab_d3_sub <- sp.na.omit(remove.duplicates(lowsnab_d3_sub))
 
 # Interactive variogram fitting procedure
 # Run these lines once
@@ -209,74 +209,145 @@ lowsnab_d3_sub <- sp.na.omit(lowsnab_d3_sub)
 # save(hollins_d3.vgm, file = paste0(projdir, "hollins_d3_vgm.Rdata"))
 
 
-# Load saved variograms (vgm objects)
-load(paste0(projdir, "birkhowe_d1_vgm.RData"))
-load(paste0(projdir, "birkhowe_d2_vgm.Rdata"))
-load(paste0(projdir, "birkhowe_d3_vgm.Rdata"))
+# # Load saved variograms (vgm objects)
+# load(paste0(projdir, "birkhowe_d1_vgm.RData"))
+# load(paste0(projdir, "birkhowe_d2_vgm.Rdata"))
+# load(paste0(projdir, "birkhowe_d3_vgm.Rdata"))
+# 
+# load(paste0(projdir, "lowsnab_d1_vgm.Rdata"))
+# load(paste0(projdir, "lowsnab_d2_vgm.Rdata"))
+# load(paste0(projdir, "lowsnab_d3_vgm.Rdata"))
+# 
+# load(paste0(projdir, "hollins_d1_vgm.Rdata"))
+# load(paste0(projdir, "hollins_d2_vgm.Rdata"))
+# load(paste0(projdir, "hollins_d3_vgm.Rdata"))
 
-load(paste0(projdir, "lowsnab_d1_vgm.Rdata"))
-load(paste0(projdir, "lowsnab_d2_vgm.Rdata"))
-load(paste0(projdir, "lowsnab_d3_vgm.Rdata"))
+# Some ifit variograms not working
+# More robust procedure to optimise fit instead?
 
-load(paste0(projdir, "hollins_d1_vgm.Rdata"))
-load(paste0(projdir, "hollins_d2_vgm.Rdata"))
-load(paste0(projdir, "hollins_d3_vgm.Rdata"))
+birkhowe_d1.vgmfit <- fit.variogram(variogram(totC_mean_mass_vol ~ 1, birkhowe_d1_sub),
+                                    vgm(c("Exp", "Mat", "Sph", "Ste", "Gau")),
+                                    fit.kappa = TRUE,
+                                    debug.level = 1)
 
+birkhowe_d2.vgmfit <- fit.variogram(variogram(totC_mean_mass_vol ~ 1, birkhowe_d2_sub),
+                                    vgm(c("Exp", "Mat", "Sph", "Ste", "Gau")),
+                                    fit.kappa = TRUE,
+                                    debug.level = 1)
+
+birkhowe_d3.vgmfit <- fit.variogram(variogram(totC_mean_mass_vol ~ 1, birkhowe_d3_sub),
+                                    vgm(c("Exp", "Mat", "Sph", "Ste", "Gau")),
+                                    fit.kappa = TRUE,
+                                    debug.level = 1)
+
+lowsnab_d1.vgmfit <- fit.variogram(variogram(totC_mean_mass_vol ~ 1, lowsnab_d1_sub),
+                                    vgm(c("Exp", "Mat", "Sph", "Ste", "Gau")),
+                                    fit.kappa = TRUE,
+                                   debug.level = 1)
+
+lowsnab_d2.vgmfit <- fit.variogram(variogram(totC_mean_mass_vol ~ 1, lowsnab_d2_sub),
+                                   vgm(c("Exp", "Mat", "Sph", "Ste", "Gau")),
+                                   fit.kappa = TRUE,
+                                   debug.level = 1)
+
+lowsnab_d3.vgmfit <- fit.variogram(variogram(totC_mean_mass_vol ~ 1, lowsnab_d3_sub),
+                                   vgm(c("Exp", "Mat", "Sph", "Ste", "Gau")),
+                                   fit.kappa = TRUE,
+                                   debug.level = 1)
+
+hollins_d1.vgmfit <- fit.variogram(variogram(totC_mean_mass_vol ~ 1, hollins_d1_sub),
+                                   vgm(c("Exp", "Mat", "Sph", "Ste", "Gau")),
+                                   fit.kappa = TRUE,
+                                   debug.level = 1)
+
+hollins_d2.vgmfit <- fit.variogram(variogram(totC_mean_mass_vol ~ 1, hollins_d2_sub),
+                                   vgm(c("Exp", "Mat", "Sph", "Ste", "Gau")),
+                                   fit.kappa = TRUE,
+                                   debug.level = 1)
+
+hollins_d3.vgmfit <- fit.variogram(variogram(totC_mean_mass_vol ~ 1, hollins_d3_sub),
+                                   vgm(c("Exp", "Mat", "Sph", "Ste", "Gau")),
+                                   fit.kappa = TRUE,
+                                   debug.level = 1)
+
+# Investigate utility of automap::autofit
+
+birkhowe_d1.vgmafit <- autofitVariogram(totC_mean_mass_vol ~ 1,
+                                        birkhowe_d1_sub,
+                                        verbose = TRUE)
+
+birkhowe_d2.vgmafit <- autofitVariogram(totC_mean_mass_vol ~ 1,
+                                        birkhowe_d2_sub,
+                                        verbose = TRUE)
+
+birkhowe_d3.vgmafit <- autofitVariogram(totC_mean_mass_vol ~ 1,
+                                        birkhowe_d3_sub,
+                                        verbose = TRUE)
 
 # Kriging with cross-validation
 birkhowe_d1.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                            birkhowe_d1_sub,
-                           model = birkhowe_d1.vgm)
+                           model = birkhowe_d1.vgmfit,
+                           debug.level = 2)
 
-birkhowe_d1.stats <- extract_krige_stats(birkhowe_d1.cv)
+(birkhowe_d1.stats <- extract_krige_stats(birkhowe_d1.cv))
 
 birkhowe_d2.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                            birkhowe_d2_sub,
-                           model = birkhowe_d2.vgm)
+                           model = birkhowe_d2.vgmfit,
+                           debug.level = 2)
 
-birkhowe_d2.stats <- extract_krige_stats(birkhowe_d2.cv)
+(birkhowe_d2.stats <- extract_krige_stats(birkhowe_d2.cv))
 
 birkhowe_d3.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                            birkhowe_d3_sub,
-                           model = birkhowe_d3.vgm)
+                           model = birkhowe_d3.vgmfit,
+                           debug.level = 2)
 
-birkhowe_d3.stats <- extract_krige_stats(birkhowe_d3.cv)
+(birkhowe_d3.stats <- extract_krige_stats(birkhowe_d3.cv))
 
 lowsnab_d1.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                           lowsnab_d1_sub,
-                          model = lowsnab_d1.vgm)
+                          model = lowsnab_d1.vgmfit,
+                          debug.level = 2)
 
-lowsnab_d1.stats <- extract_krige_stats(lowsnab_d1.cv)
+(lowsnab_d1.stats <- extract_krige_stats(lowsnab_d1.cv))
 
 lowsnab_d2.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                           lowsnab_d2_sub,
-                          model = lowsnab_d2.vgm)
+                          model = lowsnab_d2.vgmfit,
+                          debug.level = 2)
 
-lowsnab_d2.stats <- extract_krige_stats(lowsnab_d2.cv)
+(lowsnab_d2.stats <- extract_krige_stats(lowsnab_d2.cv))
 
 lowsnab_d3.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                           lowsnab_d3_sub,
-                          model = lowsnab_d3.vgm)
+                          model = lowsnab_d3.vgmfit,
+                          debug.level = 2)
 
-lowsnab_d3.stats <- extract_krige_stats(lowsnab_d3.cv)
+(lowsnab_d3.stats <- extract_krige_stats(lowsnab_d3.cv))
 
 hollins_d1.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                           hollins_d1_sub,
-                          model = hollins_d1.vgm)
+                          model = hollins_d1.vgmfit,
+                          debug.level = 2)
 
-hollins_d1.stats <- extract_krige_stats(hollins_d1.cv)
+(hollins_d1.stats <- extract_krige_stats(hollins_d1.cv))
 
 hollins_d2.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                           hollins_d2_sub,
-                          model = hollins_d2.vgm)
+                          model = hollins_d2.vgmfit,
+                          debug.level = 2)
 
-hollins_d2.stats <- extract_krige_stats(hollins_d2.cv)
+(hollins_d2.stats <- extract_krige_stats(hollins_d2.cv))
 
 hollins_d3.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                           hollins_d3_sub,
-                          model = hollins_d3.vgm)
+                          model = hollins_d3.vgmfit,
+                          debug.level = 2,
+                          chol = 0)
 
-hollins_d3.stats <- extract_krige_stats(hollins_d3.cv)
+(hollins_d3.stats <- extract_krige_stats(hollins_d3.cv))
 
 # Consolidate kriging summaries into site tables
 
@@ -300,6 +371,8 @@ allsite.stats <- bind_rows(list(birkhowe.stats,
                                 lowsnab.stats,
                                 hollins_d1.stats),
                            .id = "site")
+
+allsite.stats
 
 write.csv(allsite.stats, file = paste0(projdir, "allsite_stats.csv"),
           row.names = FALSE)
