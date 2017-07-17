@@ -1,7 +1,6 @@
 library(rgdal)
 library(geoR)
 library(gstat)
-library(sf)
 library(dplyr)
 library(here)
 
@@ -97,10 +96,6 @@ hollins_d3_sub <- hollins_d3[, sub_cols]
 lowsnab_d1_sub <- lowsnab_d1[, sub_cols]
 lowsnab_d2_sub <- lowsnab_d2[, sub_cols]
 lowsnab_d3_sub <- lowsnab_d3[, sub_cols]
-
-# Subset using dplyr select for sf. Currently doesn't work.
-# birkhowe_d1_sub2 <- birkhowe_d1 %>%
-#                       select.sf(hls_plot, elevation, moisture, totC_mean_mass_vol)
 
 # Filter rows containing NAs and remove duplicates
 # Overwrite _sub object
