@@ -261,7 +261,7 @@ hollins_d2.vgmfit <- fit.variogram(variogram(totC_mean_mass_vol ~ 1, hollins_d2_
                                    fit.kappa = TRUE,
                                    debug.level = 1)
 
-hollins_d3.vgmfit <- fit.variogram(variogram(totC_mean_mass_vol ~ 1, hollins_d3_sub),
+hollins_d3.vgmfit <- fit.variogram(variogram(log(totC_mean_mass_vol) ~ 1, hollins_d3_sub),
                                    vgm(c("Exp", "Mat", "Sph", "Ste", "Gau")),
                                    fit.kappa = TRUE,
                                    debug.level = 1)
@@ -300,12 +300,15 @@ hollins_d2.vgmafit <- autofitVariogram(totC_mean_mass_vol ~ 1,
                                        hollins_d2_sub,
                                        verbose = TRUE)
 
-hollins_d3.vgmafit <- autofitVariogram(totC_mean_mass_vol ~ 1,
+hollins_d3.vgmafit <- autofitVariogram(log(totC_mean_mass_vol) ~ 1,
                                        hollins_d3_sub,
                                        verbose = TRUE)
 
 
 # Kriging with cross-validation
+# Compare gstat and automap::autofitVariogram approaches
+
+# Birkhowe D1
 birkhowe_d1.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                            birkhowe_d1_sub,
                            model = birkhowe_d1.vgmfit,
@@ -313,6 +316,14 @@ birkhowe_d1.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture +
 
 (birkhowe_d1.stats <- extract_krige_stats(birkhowe_d1.cv))
 
+birkhowe_d1.afcv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
+                           birkhowe_d1_sub,
+                           model = birkhowe_d1.vgmafit$var_model,
+                           debug.level = 2)
+
+(birkhowe_d1.astats <- extract_krige_stats(birkhowe_d1.afcv))
+
+# Birkhowe d2
 birkhowe_d2.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                            birkhowe_d2_sub,
                            model = birkhowe_d2.vgmfit,
@@ -320,6 +331,14 @@ birkhowe_d2.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture +
 
 (birkhowe_d2.stats <- extract_krige_stats(birkhowe_d2.cv))
 
+birkhowe_d2.afcv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
+                           birkhowe_d2_sub,
+                           model = birkhowe_d2.vgmafit$var_model,
+                           debug.level = 2)
+
+(birkhowe_d2.astats <- extract_krige_stats(birkhowe_d2.afcv))
+
+# Birkhowe d3
 birkhowe_d3.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                            birkhowe_d3_sub,
                            model = birkhowe_d3.vgmfit,
@@ -327,6 +346,14 @@ birkhowe_d3.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture +
 
 (birkhowe_d3.stats <- extract_krige_stats(birkhowe_d3.cv))
 
+birkhowe_d3.afcv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
+                           birkhowe_d3_sub,
+                           model = birkhowe_d3.vgmafit$var_model,
+                           debug.level = 2)
+
+(birkhowe_d3.astats <- extract_krige_stats(birkhowe_d3.afcv))
+
+# Lowsnab d1
 lowsnab_d1.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                           lowsnab_d1_sub,
                           model = lowsnab_d1.vgmfit,
@@ -334,6 +361,14 @@ lowsnab_d1.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + 
 
 (lowsnab_d1.stats <- extract_krige_stats(lowsnab_d1.cv))
 
+lowsnab_d1.afcv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
+                          lowsnab_d1_sub,
+                          model = lowsnab_d1.vgmafit$var_model,
+                          debug.level = 2)
+
+(lowsnab_d1.astats <- extract_krige_stats(lowsnab_d1.afcv))
+
+# Lowsnab D2
 lowsnab_d2.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                           lowsnab_d2_sub,
                           model = lowsnab_d2.vgmfit,
@@ -341,6 +376,14 @@ lowsnab_d2.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + 
 
 (lowsnab_d2.stats <- extract_krige_stats(lowsnab_d2.cv))
 
+lowsnab_d2.afcv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
+                          lowsnab_d2_sub,
+                          model = lowsnab_d2.vgmafit$var_model,
+                          debug.level = 2)
+
+(lowsnab_d2.astats <- extract_krige_stats(lowsnab_d2.afcv))
+
+# Lowsnab D3
 lowsnab_d3.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                           lowsnab_d3_sub,
                           model = lowsnab_d3.vgmfit,
@@ -348,6 +391,14 @@ lowsnab_d3.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + 
 
 (lowsnab_d3.stats <- extract_krige_stats(lowsnab_d3.cv))
 
+lowsnab_d3.afcv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
+                          lowsnab_d3_sub,
+                          model = lowsnab_d3.vgmafit$var_model,
+                          debug.level = 2)
+
+(lowsnab_d3.astats <- extract_krige_stats(lowsnab_d3.afcv))
+
+# Hollins D1
 hollins_d1.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                           hollins_d1_sub,
                           model = hollins_d1.vgmfit,
@@ -355,6 +406,14 @@ hollins_d1.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + 
 
 (hollins_d1.stats <- extract_krige_stats(hollins_d1.cv))
 
+hollins_d1.afcv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
+                          hollins_d1_sub,
+                          model = hollins_d1.vgmafit$var_model,
+                          debug.level = 2)
+
+(hollins_d1.astats <- extract_krige_stats(hollins_d1.afcv))
+
+# Hollins D2
 hollins_d2.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                           hollins_d2_sub,
                           model = hollins_d2.vgmfit,
@@ -362,13 +421,28 @@ hollins_d2.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + 
 
 (hollins_d2.stats <- extract_krige_stats(hollins_d2.cv))
 
-hollins_d3.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
+hollins_d2.afcv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
+                          hollins_d2_sub,
+                          model = hollins_d2.vgmafit$var_model,
+                          debug.level = 2)
+
+(hollins_d2.astats <- extract_krige_stats(hollins_d2.afcv))
+
+# Hollins D3
+hollins_d3.cv <- krige.cv(formula = log(totC_mean_mass_vol) ~ elevation + moisture + hls_plot,
                           hollins_d3_sub,
                           model = hollins_d3.vgmfit,
-                          debug.level = 2,
-                          chol = 0)
+                          debug.level = 2)
 
 (hollins_d3.stats <- extract_krige_stats(hollins_d3.cv))
+
+hollins_d3.afcv <- krige.cv(formula = log(totC_mean_mass_vol) ~ elevation + moisture + hls_plot,
+                          hollins_d3_sub,
+                          model = hollins_d3.vgmafit$var_model,
+                          debug.level = 2)
+
+(hollins_d3.astats <- extract_krige_stats(hollins_d3.afcv))
+
 
 # Consolidate kriging summaries into site tables
 
