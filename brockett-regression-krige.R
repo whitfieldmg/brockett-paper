@@ -3,6 +3,7 @@ library(geoR)
 library(gstat)
 library(dplyr)
 library(here)
+library(automap)
 
 ## Function from Stackoverflow to remove rows containing missing data from spatial objects
 # FUNCTION TO REMOVE NA's IN sp DataFrame OBJECT
@@ -278,6 +279,31 @@ birkhowe_d2.vgmafit <- autofitVariogram(totC_mean_mass_vol ~ 1,
 birkhowe_d3.vgmafit <- autofitVariogram(totC_mean_mass_vol ~ 1,
                                         birkhowe_d3_sub,
                                         verbose = TRUE)
+
+lowsnab_d1.vgmafit <- autofitVariogram(totC_mean_mass_vol ~1,
+                                       lowsnab_d1_sub,
+                                       verbose = TRUE)
+
+lowsnab_d2.vgmafit <- autofitVariogram(totC_mean_mass_vol ~ 1,
+                                       lowsnab_d2_sub,
+                                       verbose = TRUE)
+
+lowsnab_d3.vgmafit <- autofitVariogram(totC_mean_mass_vol ~ 1,
+                                       lowsnab_d3_sub,
+                                       verbose = TRUE)
+
+hollins_d1.vgmafit <- autofitVariogram(totC_mean_mass_vol ~ 1,
+                                       hollins_d1_sub,
+                                       verbose = TRUE)
+
+hollins_d2.vgmafit <- autofitVariogram(totC_mean_mass_vol ~ 1,
+                                       hollins_d2_sub,
+                                       verbose = TRUE)
+
+hollins_d3.vgmafit <- autofitVariogram(totC_mean_mass_vol ~ 1,
+                                       hollins_d3_sub,
+                                       verbose = TRUE)
+
 
 # Kriging with cross-validation
 birkhowe_d1.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
