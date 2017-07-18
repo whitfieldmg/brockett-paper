@@ -79,17 +79,14 @@ hollins_elevation <- read.csv(paste0(projdir, "hollins_elevation.csv"))
 
 # Remove empty elevation column from spatial data
 hollins_d1@data <- select(hollins_d1@data, -elevation, -hls_plot) %>%
-                    rename(hls_plot = hls_vegcomm)
+                    rename(hls_plot = hls_vegcomm) %>%
+                    left_join(hollins_elevation, by = "gps_id")
 hollins_d2@data <- select(hollins_d2@data, -elevation, -hls_plot) %>%
-                    rename(hls_plot = hls_vegcomm)
+                    rename(hls_plot = hls_vegcomm) %>%
+                    left_join(hollins_elevation, by = "gps_id")
 hollins_d3@data <- select(hollins_d3@data, -elevation, -hls_plot) %>%
-                    rename(hls_plot = hls_vegcomm)
-
-hollins_d1@data <- 
-
-hollins_d1@data <- left_join(hollins_d1@data, hollins_elevation, by = "gps_id")
-hollins_d2@data <- left_join(hollins_d2@data, hollins_elevation, by = "gps_id")
-hollins_d3@data <- left_join(hollins_d3@data, hollins_elevation, by = "gps_id")
+                    rename(hls_plot = hls_vegcomm) %>%
+                    left_join(hollins_elevation, by = "gps_id")
 
 # Subset necessary columns from data
 sub_cols <- c("hls_plot", "elevation", "moisture", "totC_mean_mass_vol")
