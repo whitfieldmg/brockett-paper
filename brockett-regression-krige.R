@@ -5,6 +5,7 @@ library(dplyr)
 library(tidyr)
 library(here)
 library(automap)
+library(readr)
 
 ## Function from Stackoverflow to remove rows containing missing data from spatial objects
 # FUNCTION TO REMOVE NA's IN sp DataFrame OBJECT
@@ -265,7 +266,7 @@ hollins_d2.vgmfit <- fit.variogram(variogram(totC_mean_mass_vol ~ 1, hollins_d2_
                                    fit.kappa = TRUE,
                                    debug.level = 1)
 
-hollins_d3.vgmfit <- fit.variogram(variogram(log(totC_mean_mass_vol) ~ 1, hollins_d3_sub),
+hollins_d3.vgmfit <- fit.variogram(variogram(totC_mean_mass_vol ~ 1, hollins_d3_sub),
                                    vgm(c("Exp", "Mat", "Sph", "Ste", "Gau")),
                                    fit.kappa = TRUE,
                                    debug.level = 1)
@@ -304,7 +305,7 @@ hollins_d2.vgmafit <- autofitVariogram(totC_mean_mass_vol ~ 1,
                                        hollins_d2_sub,
                                        verbose = TRUE)
 
-hollins_d3.vgmafit <- autofitVariogram(log(totC_mean_mass_vol) ~ 1,
+hollins_d3.vgmafit <- autofitVariogram(totC_mean_mass_vol ~ 1,
                                        hollins_d3_sub,
                                        verbose = TRUE)
 
@@ -317,6 +318,8 @@ birkhowe_d1.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture +
                            birkhowe_d1_sub,
                            model = birkhowe_d1.vgmfit,
                            debug.level = 2)
+
+# write_csv(as.data.frame(birkhowe_d1.cv), paste0(projdir, "birkhowe_d1_cv.csv"))
 
 (birkhowe_d1.stats <- extract_krige_stats(birkhowe_d1.cv))
 
@@ -433,14 +436,14 @@ hollins_d2.afcv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture 
 (hollins_d2.astats <- extract_krige_stats(hollins_d2.afcv))
 
 # Hollins D3
-hollins_d3.cv <- krige.cv(formula = log(totC_mean_mass_vol) ~ elevation + moisture + hls_plot,
+hollins_d3.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                           hollins_d3_sub,
                           model = hollins_d3.vgmfit,
                           debug.level = 2)
 
 (hollins_d3.stats <- extract_krige_stats(hollins_d3.cv))
 
-hollins_d3.afcv <- krige.cv(formula = log(totC_mean_mass_vol) ~ elevation + moisture + hls_plot,
+hollins_d3.afcv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                           hollins_d3_sub,
                           model = hollins_d3.vgmafit$var_model,
                           debug.level = 2)
@@ -501,3 +504,45 @@ write.csv(allsite.stats, file = paste0(projdir, "allsite_stats.csv"),
 
 write.csv(allsite.astats, file = paste0(projdir, "allsite_astats.csv"),
           row.names = FALSE)
+
+birkhowe.cv.results <- bind_rows(list(as.data.frame(birkhowe_d1.cv),
+                                       as.data.frame(birkhowe_d2.cv),
+                                       as.data.frame(birkhowe_d3.cv)),
+                        .id = "Depth")
+
+write_csv(birkhowe.cv.results, paste0(projdir, "birkhowe_cv_results.csv"))
+
+birkhowe.acv.results <- bind_rows(list(as.data.frame(birkhowe_d1.afcv),
+                                       as.data.frame(birkhowe_d2.afcv),
+                                       as.data.frame(birkhowe_d3.afcv)),
+                                  .id = "Depth")
+
+write_csv(birkhowe.acv.results, paste0(projdir, "birkhowe_acv_results.csv"))
+
+lowsnab.cv.results <- bind_rows(list(as.data.frame(lowsnab_d1.cv),
+                                      as.data.frame(lowsnab_d2.cv),
+                                      as.data.frame(lowsnab_d3.cv)),
+                                 .id = "Depth")
+
+write_csv(lowsnab.cv.results, paste0(projdir, "lowsnab_cv_results.csv"))
+
+lowsnab.acv.results <- bind_rows(list(as.data.frame(lowsnab_d1.afcv),
+                                       as.data.frame(lowsnab_d2.afcv),
+                                       as.data.frame(lowsnab_d3.afcv)),
+                                  .id = "Depth")
+
+write_csv(lowsnab.acv.results, paste0(projdir, "lowsnab_acv_results.csv"))
+
+hollins.cv.results <- bind_rows(list(as.data.frame(hollins_d1.cv),
+                                      as.data.frame(hollins_d2.cv),
+                                      as.data.frame(hollins_d3.cv)),
+                                 .id = "Depth")
+
+write_csv(hollins.cv.results, paste0(projdir, "hollins_cv_results.csv"))
+
+hollins.acv.results <- bind_rows(list(as.data.frame(hollins_d1.afcv),
+                                       as.data.frame(hollins_d2.afcv),
+                                       as.data.frame(hollins_d3.afcv)),
+                                  .id = "Depth")
+
+write_csv(hollins.acv.results, paste0(projdir, "hollins_acv_results.csv"))
