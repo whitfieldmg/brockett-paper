@@ -465,13 +465,39 @@ hollins.stats <- bind_rows(list(hollins_d1.stats,
                                 hollins_d3.stats),
                            .id = "depth")
 
+birkhowe.astats <- bind_rows(list(birkhowe_d1.astats,
+                                 birkhowe_d2.astats,
+                                 birkhowe_d3.astats),
+                            .id = "depth")
+
+lowsnab.astats <- bind_rows(list(lowsnab_d1.astats,
+                                lowsnab_d2.astats,
+                                lowsnab_d3.astats),
+                           .id = "depth")
+
+hollins.astats <- bind_rows(list(hollins_d1.astats,
+                                hollins_d2.astats,
+                                hollins_d3.astats),
+                           .id = "depth")
+
 # A table of tables for export
-allsite.stats <- bind_rows(list(birkhowe.stats,
-                                lowsnab.stats,
-                                hollins_d1.stats),
-                           .id = "site")
+allsite.stats <- bind_rows(list(birkhowe = birkhowe.stats,
+                                lowsnab = lowsnab.stats,
+                                hollins = hollins.stats),
+                           .id = "site") 
+                  
 
 allsite.stats
 
+allsite.astats <- bind_rows(list(birkhowe = birkhowe.astats,
+                                 lowsnab = lowsnab.astats,
+                                 hollins = hollins.astats),
+                            .id = "site")
+
+allsite.astats
+
 write.csv(allsite.stats, file = paste0(projdir, "allsite_stats.csv"),
+          row.names = FALSE)
+
+write.csv(allsite.astats, file = paste0(projdir, "allsite_astats.csv"),
           row.names = FALSE)
