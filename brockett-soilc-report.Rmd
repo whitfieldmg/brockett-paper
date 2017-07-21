@@ -1,0 +1,99 @@
+---
+title: "Brockett soil C regression kriging"
+author: "Mike Whitfield"
+date: "21/07/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Set up required packages and functions
+
+The following packages and functions are required to run this analysis
+```{r load packages functions, echo=FALSE}
+library(rgdal)
+library(geoR)
+library(gstat)
+library(dplyr)
+library(tidyr)
+library(here)
+library(automap)
+library(readr)
+
+## Function from Stackoverflow to remove rows containing missing data from spatial objects
+# FUNCTION TO REMOVE NA's IN sp DataFrame OBJECT
+#   x           sp spatial DataFrame object
+#   margin      Remove rows (1) or columns (2) 
+sp.na.omit <- function(x, margin=1) {
+  if (!inherits(x, "SpatialPointsDataFrame") & !inherits(x, "SpatialPolygonsDataFrame")) 
+    stop("MUST BE sp SpatialPointsDataFrame OR SpatialPolygonsDataFrame CLASS OBJECT") 
+  na.index <- unique(as.data.frame(which(is.na(x@data),arr.ind=TRUE))[,margin])
+  if(margin == 1) {  
+    cat("DELETING ROWS: ", na.index, "\n") 
+    return( x[-na.index,]  ) 
+  }
+  if(margin == 2) {  
+    cat("DELETING COLUMNS: ", na.index, "\n") 
+    return( x[,-na.index]  ) 
+  }
+}
+
+## extract_krige_stats
+# Extracts summary statistics from kriging cross-validation
+extract_krige_stats <- function(krige_model) {
+  stat_table <- data.frame(me = NA,
+                           mspe = NA,
+                           msne = NA,
+                           cor_obspred = NA,
+                           cor_predres = NA,
+                           rmse = NA)
+  krige_model <- drop_na(as.data.frame(krige_model))
+  stat_table[1, "me"] <- mean(krige_model$residual)
+  stat_table[1, "mspe"] <- mean(krige_model$residual^2)
+  stat_table[1, "msne"] <- mean(krige_model$zscore^2)
+  stat_table[1, "cor_obspred"] <- cor(krige_model$observed, krige_model$var1.pred)
+  stat_table[1, "cor_predres"] <- cor(krige_model$var1.pred, krige_model$residual)
+  stat_table[1, "rmse"] <- sqrt(mean((krige_model$observed - krige_model$var1.pred)^2))
+  return(stat_table)
+}
+
+```
+
+Next we set the paths to the project folder, and the various files within it:
+
+```{r set paths}
+# Set path to project
+(projdir <- paste0(here(), "/brockett-soilc/"))
+
+# Set paths to geodatabases
+birkhowe.gdb <- paste0(projdir, "MikeBirkhowe.gdb")
+hollins.gdb <- paste0(projdir, "MikeHollins.gdb")
+lowsnab.gdb <- paste0(projdir, "MikeLowsnab.gdb")
+
+# Examine Feature Classes present in geodatabases
+(birkhowe_fclist <- ogrListLayers(birkhowe.gdb))
+(hollins_fclist <- ogrListLayers(hollins.gdb))
+(lowsnab_fclist <- ogrListLayers(lowsnab.gdb))
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

@@ -53,14 +53,9 @@ hollins.gdb <- paste0(projdir, "MikeHollins.gdb")
 lowsnab.gdb <- paste0(projdir, "MikeLowsnab.gdb")
 
 # Examine Feature Classes present in geodatabases
-birkhowe_fclist <- ogrListLayers(birkhowe.gdb)
-birkhowe_fclist
-
-hollins_fclist <- ogrListLayers(hollins.gdb)
-hollins_fclist
-
-lowsnab_fclist <- ogrListLayers(lowsnab.gdb)
-lowsnab_fclist
+(birkhowe_fclist <- ogrListLayers(birkhowe.gdb))
+(hollins_fclist <- ogrListLayers(hollins.gdb))
+(lowsnab_fclist <- ogrListLayers(lowsnab.gdb))
 
 # Read Feature Classes from geodatabases
 # One per depth, three depths per site
