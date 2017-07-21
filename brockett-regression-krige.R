@@ -62,7 +62,6 @@ lowsnab.gdb <- paste0(projdir, "MikeLowsnab.gdb")
 birkhowe_d1 <- readOGR(dsn = birkhowe.gdb, layer = "birkhowe_soild1_pt_v5", pointDropZ = TRUE)
 birkhowe_d2 <- readOGR(dsn = birkhowe.gdb, layer = "birkhowe_soild2_pt_v5", pointDropZ = TRUE)
 birkhowe_d3 <- readOGR(dsn = birkhowe.gdb, layer = "birkhowe_soild3_pt_v5", pointDropZ = TRUE)
-# birkhowe_man <- readOGR(dsn = birkhowe.gdb, layer = "birkhowe_managementareas_po_2")
 hollins_d1 <- readOGR(dsn = hollins.gdb, layer = "hollins_soild1_pt_v3", pointDropZ = TRUE)
 hollins_d2 <- readOGR(dsn = hollins.gdb, layer = "hollins_soild2_pt_v3", pointDropZ = TRUE)
 hollins_d3 <- readOGR(dsn = hollins.gdb, layer = "hollins_soild3_pt_v3", pointDropZ = TRUE)
@@ -71,9 +70,12 @@ lowsnab_d2 <- readOGR(dsn = lowsnab.gdb, layer = "lowsnab_soild2_pt_v5", pointDr
 lowsnab_d3 <- readOGR(dsn = lowsnab.gdb, layer = "lowsnab_soild3_pt_v5", pointDropZ = TRUE)
 
 # Read elevation data for Hollins (missing from geodatabase)
-hollins_elevation <- read.csv(paste0(projdir, "hollins_elevation.csv"))
+hollins_elevation <- read_csv(paste0(projdir, "hollins_elevation.csv"))
 
-# Remove empty elevation column from spatial data
+# Remove empty elevation column from spatial data for Hollins
+# Remove column hls_plot and rename hls_vegcomm to hls_plot, for consistency with other
+# data
+# Left-join the elevation data to the existing data for each depth
 hollins_d1@data <- select(hollins_d1@data, -elevation, -hls_plot) %>%
                     rename(hls_plot = hls_vegcomm) %>%
                     left_join(hollins_elevation, by = "gps_id")
@@ -313,8 +315,6 @@ birkhowe_d1.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture +
                            birkhowe_d1_sub,
                            model = birkhowe_d1.vgmfit,
                            debug.level = 2)
-
-# write_csv(as.data.frame(birkhowe_d1.cv), paste0(projdir, "birkhowe_d1_cv.csv"))
 
 (birkhowe_d1.stats <- extract_krige_stats(birkhowe_d1.cv))
 
