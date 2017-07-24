@@ -21,6 +21,7 @@ library(tidyr)
 library(here)
 library(automap)
 library(readr)
+library(knitr)
 
 ## Function from Stackoverflow to remove rows containing missing data from spatial objects
 # FUNCTION TO REMOVE NA's IN sp DataFrame OBJECT
@@ -433,10 +434,11 @@ We combine the summary stats for each site and depth into two tables - one for e
 allsite.stats <- bind_rows(list(birkhowe = birkhowe.stats,
                                 lowsnab = lowsnab.stats,
                                 hollins = hollins.stats),
-                           .id = "site") 
+                           .id = "site")
+```
                   
-
-allsite.stats
+```{r echo=FALSE, results="asis"}
+kable(allsite.stats)
 ```
 
 **automap::autofitVariogram method:**
@@ -446,6 +448,8 @@ allsite.astats <- bind_rows(list(birkhowe = birkhowe.astats,
                                  lowsnab = lowsnab.astats,
                                  hollins = hollins.astats),
                             .id = "site")
+```
 
-allsite.astats
+```{r echo=FALSE, results="asis"}
+kable(allsite.astats)
 ```
