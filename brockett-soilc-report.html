@@ -20691,6 +20691,7 @@ hollins.astats &lt;- bind_rows(list(hollins_d1.astats,
                                 hollins = hollins.stats),
                            .id = &quot;site&quot;)</code></pre>
 <table>
+<caption>Kriging model fits, gstat::fit.variogram method</caption>
 <thead>
 <tr class="header">
 <th align="left">site</th>
@@ -20800,29 +20801,114 @@ hollins.astats &lt;- bind_rows(list(hollins_d1.astats,
 <pre class="r"><code>allsite.astats &lt;- bind_rows(list(birkhowe = birkhowe.astats,
                                  lowsnab = lowsnab.astats,
                                  hollins = hollins.astats),
-                            .id = &quot;site&quot;)
-
-allsite.astats</code></pre>
-<pre><code>##       site depth          me      mspe      msne cor_obspred cor_predres
-## 1 birkhowe     1 -0.00349148  508.2162 1.2639865   0.1306087 -0.25113124
-## 2 birkhowe     2 -0.71657125  362.3688 0.6232038   0.3597445 -0.38611661
-## 3 birkhowe     3 -2.81022771 4804.6798 0.8357988  -0.2431749 -0.53327851
-## 4  lowsnab     1 -0.23633548  238.5390 0.4313003   0.8306700 -0.07456996
-## 5  lowsnab     2 -0.15610535  798.2074 0.4179531   0.8152619 -0.10558552
-## 6  lowsnab     3  0.36577048 1081.5914 0.4768570   0.7047426 -0.08906689
-## 7  hollins     1  0.13168915  237.5600 1.3549307   0.7172000 -0.18248529
-## 8  hollins     2  0.71032080  142.1980 1.1990254   0.6703982 -0.18480944
-## 9  hollins     3         NaN       NaN       NaN          NA          NA
-##       rmse
-## 1 22.54365
-## 2 19.03599
-## 3 69.31580
-## 4 15.44471
-## 5 28.25256
-## 6 32.88756
-## 7 15.41298
-## 8 11.92468
-## 9      NaN</code></pre>
+                            .id = &quot;site&quot;)</code></pre>
+<table>
+<caption>Kriging model fits, automap::autofitVariogram method</caption>
+<thead>
+<tr class="header">
+<th align="left">site</th>
+<th align="left">depth</th>
+<th align="right">me</th>
+<th align="right">mspe</th>
+<th align="right">msne</th>
+<th align="right">cor_obspred</th>
+<th align="right">cor_predres</th>
+<th align="right">rmse</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">birkhowe</td>
+<td align="left">1</td>
+<td align="right">-0.0034915</td>
+<td align="right">508.2162</td>
+<td align="right">1.2639865</td>
+<td align="right">0.1306087</td>
+<td align="right">-0.2511312</td>
+<td align="right">22.54365</td>
+</tr>
+<tr class="even">
+<td align="left">birkhowe</td>
+<td align="left">2</td>
+<td align="right">-0.7165712</td>
+<td align="right">362.3688</td>
+<td align="right">0.6232038</td>
+<td align="right">0.3597445</td>
+<td align="right">-0.3861166</td>
+<td align="right">19.03599</td>
+</tr>
+<tr class="odd">
+<td align="left">birkhowe</td>
+<td align="left">3</td>
+<td align="right">-2.8102277</td>
+<td align="right">4804.6798</td>
+<td align="right">0.8357988</td>
+<td align="right">-0.2431749</td>
+<td align="right">-0.5332785</td>
+<td align="right">69.31580</td>
+</tr>
+<tr class="even">
+<td align="left">lowsnab</td>
+<td align="left">1</td>
+<td align="right">-0.2363355</td>
+<td align="right">238.5390</td>
+<td align="right">0.4313003</td>
+<td align="right">0.8306700</td>
+<td align="right">-0.0745700</td>
+<td align="right">15.44471</td>
+</tr>
+<tr class="odd">
+<td align="left">lowsnab</td>
+<td align="left">2</td>
+<td align="right">-0.1561053</td>
+<td align="right">798.2074</td>
+<td align="right">0.4179531</td>
+<td align="right">0.8152619</td>
+<td align="right">-0.1055855</td>
+<td align="right">28.25256</td>
+</tr>
+<tr class="even">
+<td align="left">lowsnab</td>
+<td align="left">3</td>
+<td align="right">0.3657705</td>
+<td align="right">1081.5914</td>
+<td align="right">0.4768570</td>
+<td align="right">0.7047426</td>
+<td align="right">-0.0890669</td>
+<td align="right">32.88756</td>
+</tr>
+<tr class="odd">
+<td align="left">hollins</td>
+<td align="left">1</td>
+<td align="right">0.1316891</td>
+<td align="right">237.5600</td>
+<td align="right">1.3549307</td>
+<td align="right">0.7172000</td>
+<td align="right">-0.1824853</td>
+<td align="right">15.41298</td>
+</tr>
+<tr class="even">
+<td align="left">hollins</td>
+<td align="left">2</td>
+<td align="right">0.7103208</td>
+<td align="right">142.1980</td>
+<td align="right">1.1990254</td>
+<td align="right">0.6703982</td>
+<td align="right">-0.1848094</td>
+<td align="right">11.92468</td>
+</tr>
+<tr class="odd">
+<td align="left">hollins</td>
+<td align="left">3</td>
+<td align="right">NaN</td>
+<td align="right">NaN</td>
+<td align="right">NaN</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NaN</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 

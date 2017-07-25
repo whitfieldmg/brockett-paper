@@ -437,8 +437,8 @@ allsite.stats <- bind_rows(list(birkhowe = birkhowe.stats,
                            .id = "site")
 ```
                   
-```{r echo=FALSE, results="asis"}
-kable(allsite.stats)
+```{r gstat krige fits summary table, echo=FALSE, results="asis"}
+kable(allsite.stats, caption = "Kriging model fits, gstat::fit.variogram method")
 ```
 
 **automap::autofitVariogram method:**
@@ -450,6 +450,6 @@ allsite.astats <- bind_rows(list(birkhowe = birkhowe.astats,
                             .id = "site")
 ```
 
-```{r echo=FALSE, results="asis"}
-kable(allsite.astats)
+```{r automap krige fits summary table, echo=FALSE, results="asis"}
+kable(allsite.astats, caption = "Kriging model fits, automap::autofitVariogram method")
 ```
