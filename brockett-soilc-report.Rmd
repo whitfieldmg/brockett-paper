@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Set up required packages and functions
 
 The following packages and functions are required to run this analysis
-```{r load packages functions, echo=FALSE}
+```{r load packages functions, echo=TRUE, results="hide"}
 library(rgdal)
 library(geoR)
 library(gstat)
@@ -158,7 +158,7 @@ lowsnab_d3_sub <- sp.na.omit(remove.duplicates(lowsnab_d3_sub))
 
 There are a couple of methods for fitting variograms to data. The fit.variogram procedure in gstat will attempt to optimise and select an appropriate variogram model. We use gstat::fit.variogram to fit a variogram for each site and depth to start with:
 
-```{r gstat::fit.variogram, echo=FALSE}
+```{r gstat::fit.variogram, echo=TRUE, results="hide", warning=FALSE}
 birkhowe_d1.vgmfit <- fit.variogram(variogram(totC_mean_mass_vol ~ 1, birkhowe_d1_sub),
                                     vgm(c("Exp", "Mat", "Sph", "Ste", "Gau")),
                                     fit.kappa = TRUE,
@@ -209,7 +209,7 @@ hollins_d3.vgmfit <- fit.variogram(variogram(totC_mean_mass_vol ~ 1, hollins_d3_
 
 Another option available to us for fitting variograms is the automap::autofitVariogram function. This is a wrapper for gstat::fit.variogram, but uses a different set of starting values to fit variograms and a different selection procedure to select the optimal variogram. This might yield different results to gstat::fit.variogram, so we repeat the steps above using this procedure. The function reports the optimal variogram selected and details of the optimisation procedure.
 
-```{r automap::autofitVariogram, echo=FALSE}
+```{r automap::autofitVariogram, echo=TRUE, results="hide", warning=FALSE}
 birkhowe_d1.vgmafit <- autofitVariogram(totC_mean_mass_vol ~ 1,
                                         birkhowe_d1_sub,
                                         verbose = TRUE)
@@ -253,7 +253,7 @@ With the variograms set up using two different methods, we can proceed with the 
 
 N-fold cross validation is used. This is a leave-one-out procedure - the modelled surface is fitted for as many data points that there are at each site, -1, leaving one data point out each time.
 
-```{r kriging with n-fold cross validation, echo=FALSE}
+```{r kriging with n-fold cross validation, echo=FALSE, results="hide", warning=FALSE}
 # Birkhowe D1
 birkhowe_d1.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                            birkhowe_d1_sub,
@@ -394,7 +394,7 @@ hollins_d3.afcv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture 
 
 Consolidate kriging summaries into site tables
 
-```{r kriging summary tables}
+```{r kriging summary tables, echo=FALSE}
 birkhowe.stats <- bind_rows(list(birkhowe_d1.stats,
                                  birkhowe_d2.stats,
                                  birkhowe_d3.stats),
