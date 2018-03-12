@@ -87,6 +87,7 @@ lowsnab_d1 <- readOGR(dsn = lowsnab.gdb, layer = "lowsnab_soild1_pt_v5", pointDr
 lowsnab_d2 <- readOGR(dsn = lowsnab.gdb, layer = "lowsnab_soild2_pt_v5", pointDropZ = TRUE)
 lowsnab_d3 <- readOGR(dsn = lowsnab.gdb, layer = "lowsnab_soild3_pt_v5", pointDropZ = TRUE)
 lowsnab_d4 <- readOGR(dsn = lowsnab.gdb, layer = "lowsnab_soild4_pt_v5", pointDropZ = TRUE)
+lowsnab_d5 <- readOGR(dsn = lowsnab.gdb, layer = "lowsnab_soild5_pt_v5", pointDropZ = TRUE)
 
 # Read elevation data for Hollins (missing from geodatabase)
 hollins_elevation <- read_csv(paste0(projdir, "hollins_elevation.csv"))
@@ -125,6 +126,7 @@ lowsnab_d1_sub <- lowsnab_d1[, sub_cols]
 lowsnab_d2_sub <- lowsnab_d2[, sub_cols]
 lowsnab_d3_sub <- lowsnab_d3[, sub_cols]
 lowsnab_d4_sub <- lowsnab_d4[, sub_cols]
+lowsnab_d5_sub <- lowsnab_d5[, sub_cols]
 
 # Filter rows containing NAs and remove duplicates
 # Overwrite _sub object
@@ -142,7 +144,7 @@ hollins_d4_sub <- sp.na.omit(remove.duplicates(hollins_d4_sub))
 lowsnab_d2_sub <- sp.na.omit(remove.duplicates(lowsnab_d2_sub))
 lowsnab_d3_sub <- sp.na.omit(remove.duplicates(lowsnab_d3_sub))
 lowsnab_d4_sub <- sp.na.omit(remove.duplicates(lowsnab_d4_sub))
-
+lowsnab_d5_sub <- sp.na.omit(remove.duplicates(lowsnab_d5_sub))
 
 # Interactive variogram fitting procedure
 # Run these lines once
@@ -295,6 +297,11 @@ lowsnab_d4.vgmfit <- fit.variogram(variogram(totC_mean_mass_vol ~ 1, lowsnab_d4_
                                    fit.kappa = TRUE,
                                    debug.level = 1)
 
+lowsnab_d5.vgmfit <- fit.variogram(variogram(totC_mean_mass_vol ~ 1, lowsnab_d5_sub),
+                                   vgm(c("Exp", "Mat", "Sph", "Ste", "Gau")),
+                                   fit.kappa = TRUE,
+                                   debug.level = 1)
+
 hollins_d1.vgmfit <- fit.variogram(variogram(totC_mean_mass_vol ~ 1, hollins_d1_sub),
                                    vgm(c("Exp", "Mat", "Sph", "Ste", "Gau")),
                                    fit.kappa = TRUE,
@@ -347,6 +354,10 @@ lowsnab_d3.vgmafit <- autofitVariogram(totC_mean_mass_vol ~ 1,
 
 lowsnab_d4.vgmafit <- autofitVariogram(totC_mean_mass_vol ~ 1,
                                        lowsnab_d4_sub,
+                                       verbose = TRUE)
+
+lowsnab_d5.vgmafit <- autofitVariogram(totC_mean_mass_vol ~ 1,
+                                       lowsnab_d5_sub,
                                        verbose = TRUE)
 
 hollins_d1.vgmafit <- autofitVariogram(totC_mean_mass_vol ~ 1,
@@ -489,6 +500,21 @@ lowsnab_d4.afcv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture 
 
 (lowsnab_d4.astats <- extract_krige_stats(lowsnab_d4.afcv))
 
+# Lowsnab D5
+lowsnab_d5.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
+                          lowsnab_d5_sub,
+                          model = lowsnab_d5.vgmfit,
+                          debug.level = 2)
+
+(lowsnab_d5.stats <- extract_krige_stats(lowsnab_d5.cv))
+
+lowsnab_d5.afcv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
+                            lowsnab_d5_sub,
+                            model = lowsnab_d5.vgmafit$var_model,
+                            debug.level = 2)
+
+(lowsnab_d5.astats <- extract_krige_stats(lowsnab_d5.afcv))
+
 # Hollins D1
 hollins_d1.cv <- krige.cv(formula = totC_mean_mass_vol ~ elevation + moisture + hls_plot,
                           hollins_d1_sub,
@@ -561,7 +587,8 @@ birkhowe.stats <- bind_rows(list(birkhowe_d1.stats,
 lowsnab.stats <- bind_rows(list(lowsnab_d1.stats,
                                 lowsnab_d2.stats,
                                 lowsnab_d3.stats,
-                                lowsnab_d4.stats),
+                                lowsnab_d4.stats,
+                                lowsnab_d5.stats),
                            .id = "depth")
 
 hollins.stats <- bind_rows(list(hollins_d1.stats,
@@ -579,7 +606,8 @@ birkhowe.astats <- bind_rows(list(birkhowe_d1.astats,
 lowsnab.astats <- bind_rows(list(lowsnab_d1.astats,
                                 lowsnab_d2.astats,
                                 lowsnab_d3.astats,
-                                lowsnab_d4.astats),
+                                lowsnab_d4.astats,
+                                lowsnab_d5.astats),
                            .id = "depth")
 
 hollins.astats <- bind_rows(list(hollins_d1.astats,
@@ -628,7 +656,8 @@ write_csv(birkhowe.acv.results, paste0(projdir, "birkhowe_acv_results.csv"))
 lowsnab.cv.results <- bind_rows(list(as.data.frame(lowsnab_d1.cv),
                                       as.data.frame(lowsnab_d2.cv),
                                       as.data.frame(lowsnab_d3.cv),
-                                      as.data.frame(lowsnab_d4.cv)),
+                                      as.data.frame(lowsnab_d4.cv),
+                                      as.data.frame(lowsnab_d5.cv)),
                                  .id = "Depth")
 
 write_csv(lowsnab.cv.results, paste0(projdir, "lowsnab_cv_results.csv"))
@@ -636,7 +665,8 @@ write_csv(lowsnab.cv.results, paste0(projdir, "lowsnab_cv_results.csv"))
 lowsnab.acv.results <- bind_rows(list(as.data.frame(lowsnab_d1.afcv),
                                        as.data.frame(lowsnab_d2.afcv),
                                        as.data.frame(lowsnab_d3.afcv),
-                                       as.data.frame(lowsnab_d4.afcv)),
+                                       as.data.frame(lowsnab_d4.afcv),
+                                       as.data.frame(lowsnab_d5.afcv)),
                                   .id = "Depth")
 
 write_csv(lowsnab.acv.results, paste0(projdir, "lowsnab_acv_results.csv"))
